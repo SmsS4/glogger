@@ -68,7 +68,7 @@ class LoggerFormatter(logging.Formatter):
         self.show_func = show_func
         self.emphasize_from = emphasize_from
 
-    def format(self, record):
+    def format(self, record: logging.LogRecord) -> str:
         time = self.formatTime(record, self.datefmt)
         split_3 = self.spliter * 3
         log_text = (

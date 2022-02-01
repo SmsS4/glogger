@@ -1,4 +1,5 @@
-import gaylogger as logging
+import logging
+import gaylogger as glogging
 from gaylogger import __version__
 
 
@@ -10,7 +11,7 @@ def test_basic_functionality():
     print("starting to log")
 
     for i in range(0, 9):
-        logger = logging.getLogger(f"main{i}", logging.DEBUG, split="=")
+        logger = glogging.getLogger(f"main{i}", logging.DEBUG, split="=")
         for j in range(20):
             logger.warning("im about to reveal my gender")
         logger.info("hi im gay")
