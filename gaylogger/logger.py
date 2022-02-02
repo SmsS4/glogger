@@ -8,7 +8,7 @@ FORMATS = {
     logging.CRITICAL: "\u001b[38;5;52m",
     logging.INFO: "\u001b[38;5;46m",
 }
-COLORS_INFO = [
+COLORS = [
     46,
     27,
     44,
@@ -36,12 +36,11 @@ COLORS_INFO = [
 ]
 
 
-def paint(name: str, color_scheme: int, text: str) -> str:
-    if color_scheme == logging.INFO:
-        color = "\u001b[38;5;" + str(COLORS_INFO[hash(name) % len(COLORS_INFO)]) + "m"
-    else:
-        color = FORMATS[color_scheme]
+def paint_level(level: int, text: str) -> str:
+    return f"{FORMATS[level]}{text}{reset}"
 
+def paint_name(text: str) -> str:
+    color = "\u001b[38;5;" + str(COLORS[hash(text) % len(COLORS)]) + "m"
     return f"{color}{text}{reset}"
 
 
@@ -81,10 +80,10 @@ class LoggerFormatter(logging.Formatter):
             + ")"
         )
         if record.levelno >= self.emphasize_from:
-            return paint(record.name, record.levelno, log_text)
+            return paint_level(record.levelno, log_text)
         return log_text.replace(
-            record.levelname, paint(record.name, record.levelno, record.levelname)
-        )
+            record.levelname, paint_level(record.levelno, record.levelname)
+        ).replace(record.name, paint_name(record.name))
 
 
 def get_logger(

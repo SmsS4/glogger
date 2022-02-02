@@ -12,7 +12,7 @@ def test_basic_functionality():
 
     for i in range(0, 9):
         logger = glogging.getLogger(f"main{i}", logging.DEBUG, split="=")
-        for j in range(20):
+        for j in range(2):
             logger.warning("im about to reveal my gender")
         logger.info("hi im gay")
         logger.error("gay not found")
