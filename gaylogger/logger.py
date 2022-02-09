@@ -98,7 +98,7 @@ def get_logger(
     lev_tmp = os.getenv("GAY_LEVEL")
     print(f"tmp_levl={lev_tmp}")
     if level is logging.NOTSET:
-        level = (lev_tmp, logging.INFO)[lev_tmp is None]
+        level = (lev_tmp, logging.INFO)[lev_tmp is None] # type: ignore
     print(f"level is {level}")
     stdout_h = logging.StreamHandler()
     stdout_h.setLevel(level)
