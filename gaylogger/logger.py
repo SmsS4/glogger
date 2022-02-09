@@ -96,10 +96,8 @@ def get_logger(
     emphasize_from: int = logging.ERROR,
 ) -> logging.Logger:
     lev_tmp = os.getenv("GAY_LEVEL")
-    print(f"tmp_levl={lev_tmp}")
     if level is logging.NOTSET:
         level = (lev_tmp, logging.INFO)[lev_tmp is None]  # type: ignore
-    print(f"level is {level}")
     stdout_h = logging.StreamHandler()
     stdout_h.setLevel(level)
     stdout_h.setFormatter(LoggerFormatter(split, show_func, emphasize_from))
