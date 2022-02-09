@@ -1,4 +1,5 @@
 import logging
+import os
 
 reset = "\x1b[0m"
 FORMATS = {
@@ -38,6 +39,7 @@ COLORS = [
 
 def paint_level(level: int, text: str) -> str:
     return f"{FORMATS[level]}{text}{reset}"
+
 
 def paint_name(text: str) -> str:
     color = "\u001b[38;5;" + str(COLORS[hash(text) % len(COLORS)]) + "m"
@@ -88,11 +90,16 @@ class LoggerFormatter(logging.Formatter):
 
 def get_logger(
     name: str,
-    level: int = logging.INFO,
+    level: int = logging.NOTSET,
     split: str = "=",
     show_func: bool = False,
     emphasize_from: int = logging.ERROR,
 ) -> logging.Logger:
+    lev_tmp = os.getenv("GAY_LEVEL")
+    print(f"tmp_levl={lev_tmp}")
+    if level is logging.NOTSET:
+        level = (lev_tmp, logging.INFO)[lev_tmp is None]
+    print(f"level is {level}")
     stdout_h = logging.StreamHandler()
     stdout_h.setLevel(level)
     stdout_h.setFormatter(LoggerFormatter(split, show_func, emphasize_from))
