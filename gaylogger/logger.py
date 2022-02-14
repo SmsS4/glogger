@@ -1,5 +1,6 @@
 import logging
 import os
+import zlib
 
 reset = "\x1b[0m"
 FORMATS = {
@@ -10,7 +11,7 @@ FORMATS = {
     logging.INFO: "\u001b[38;5;46m",
 }
 COLORS = [
-    46,
+    # 46,
     27,
     44,
     93,
@@ -41,8 +42,13 @@ def paint_level(level: int, text: str) -> str:
     return f"{FORMATS[level]}{text}{reset}"
 
 
+cnt = 0
+
+
 def paint_name(text: str) -> str:
-    color = "\u001b[38;5;" + str(COLORS[hash(text) % len(COLORS)]) + "m"
+    color = (
+        "\u001b[38;5;" + str(COLORS[zlib.adler32(text.encode()) % len(COLORS)]) + "m"
+    )
     return f"{color}{text}{reset}"
 
 
