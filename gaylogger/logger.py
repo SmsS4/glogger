@@ -42,9 +42,6 @@ def paint_level(level: int, text: str) -> str:
     return f"{FORMATS[level]}{text}{reset}"
 
 
-cnt = 0
-
-
 def paint_name(text: str) -> str:
     color = (
         "\u001b[38;5;" + str(COLORS[zlib.adler32(text.encode()) % len(COLORS)]) + "m"
