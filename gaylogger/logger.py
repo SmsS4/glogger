@@ -1,5 +1,6 @@
 import logging
 import os
+import zlib
 
 reset = "\x1b[0m"
 FORMATS = {
@@ -42,7 +43,9 @@ def paint_level(level: int, text: str) -> str:
 
 
 def paint_name(text: str) -> str:
-    color = "\u001b[38;5;" + str(COLORS[hash(text) % len(COLORS)]) + "m"
+    color = (
+        "\u001b[38;5;" + str(COLORS[zlib.adler32(text.encode()) % len(COLORS)]) + "m"
+    )
     return f"{color}{text}{reset}"
 
 
@@ -51,11 +54,11 @@ class LoggerFormatter(logging.Formatter):
     level_just = 40
 
     def __init__(
-        self, spliter: str, show_func: bool = False, emphasize_from: int = logging.ERROR
+        self, splitter: str, show_func: bool = False, emphasize_from: int = logging.ERROR
     ):
         """
         Args:
-            spliter: string used to split different part of the log text
+            splitter: string used to split different part of the log text
                      should be a single character
 
             show_func: wether or not show function_name in log text
@@ -65,18 +68,18 @@ class LoggerFormatter(logging.Formatter):
                             than `emphasize_from`
         """
         super().__init__()
-        self.spliter = spliter
+        self.splitter = splitter
         self.show_func = show_func
         self.emphasize_from = emphasize_from
 
     def format(self, record: logging.LogRecord) -> str:
         time = self.formatTime(record, self.datefmt)
-        split_3 = self.spliter * 3
+        split_3 = self.splitter * 3
         log_text = (
             f"{split_3}[{time}]{split_3}[{record.levelname}]".ljust(
-                self.level_just, self.spliter
+                self.level_just, self.splitter
             )
-            + f"{split_3}[{record.name}]{split_3}".ljust(self.name_just, self.spliter)
+            + f"{split_3}[{record.name}]{split_3}".ljust(self.name_just, self.splitter)
             + f" {record.getMessage()} :: ({record.filename}:"
             + (f"{record.lineno}", record.funcName)[self.show_func]
             + ")"
