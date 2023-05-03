@@ -1,6 +1,7 @@
 """Nox sessions."""
 import tempfile
 from typing import Any
+
 import nox
 from nox.sessions import Session
 
@@ -20,7 +21,9 @@ nox.options.sessions = (
 locations = ("../gaylogger",)
 
 
-def install_with_constraints(session: Session, *args: str, **kwargs: Any) -> None:
+def install_with_constraints(
+    session: Session, *args: str, **kwargs: Any
+) -> None:
     """Install packages constrained by Poetry's lock file.
     This function is a wrapper for nox.sessions.Session.install. It
     invokes pip to install packages inside of the session's virtualenv.
@@ -79,13 +82,19 @@ def safety(session: Session) -> None:
             external=True,
         )
         install_with_constraints(session, "safety")
-        session.run("safety", "check", f"--file={requirements.name}", "--full-report")
+        session.run(
+            "safety", "check", f"--file={requirements.name}", "--full-report"
+        )
 
 
 @nox.session(python="3")
 def mypy(session: Session) -> None:
     """Type-check using mypy."""
-    args = session.posargs or ["--install-types", "--non-interactive", *locations]
+    args = session.posargs or [
+        "--install-types",
+        "--non-interactive",
+        *locations,
+    ]
     install_with_constraints(session, "mypy")
     session.run("mypy", *args)
 
@@ -122,7 +131,9 @@ def typeguard(session: Session) -> None:
     args = session.posargs
     session.run("poetry", "install", "--no-dev", external=True)
     install_with_constraints(session, "pytest", "pytest-mock", "typeguard")
-    session.run("pytest", f"--typeguard-packages={PACKAGE_NAME} ", "../tests", *args)
+    session.run(
+        "pytest", f"--typeguard-packages={PACKAGE_NAME} ", "../tests", *args
+    )
 
 
 @nox.session(python="3")
