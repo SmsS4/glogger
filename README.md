@@ -3,7 +3,7 @@
 # Example
 
 ```python
-from glogger.logger import get_logger
+from gaylogger.logger import get_logger
 import logging
 
 logger = get_logger(
