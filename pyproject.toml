@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "glogger"
+name = "gaylogger"
 version = "1.0.0"
 description = ""
 authors = ["ArshiAAkhavan <letmemakenewone@gmail.com>","SmsS <smss.lite@gmail.com>"]
